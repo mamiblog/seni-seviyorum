@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sevgi Kalbi</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+        overflow: hidden; /* Sayfa dışına taşan konfetileri gizler */
+      }
+
+      .heart-container {
+        text-align: center;
+        position: relative; /* Konfeti için referans noktası */
+      }
+
+      .heart {
+        display: none;
+        width: 100px;
+        height: auto;
+        animation: heartbeat 1s infinite;
+      }
+
+      .text {
+        margin-top: 20px;
+        font-size: 24px;
+        color: #333;
+        display: none;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #fbc531;
+        opacity: 0;
+        animation: confettiAnimation 8s ease-out forwards; /* Daha yavaş düşmesi için animation-duration artırıldı */
+        transform: rotateZ(0); /* Konfetilerin dönme hareketi */
+        z-index: 1; /* Konfetilerin kalbin altında kalmasını sağlar */
+      }
+
+      @keyframes heartbeat {
+        0% {
+          transform: scale(0.8);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(0.8);
+        }
+      }
+
+      @keyframes confettiAnimation {
+        0% {
+          opacity: 0;
+          transform: translateY(-100vh) rotateZ(0); /* Yukarıdan başlaması için translateY değeri değiştirildi */
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(100vh) rotateZ(720deg); /* Yüksekliği ve dönüşü ayarlar */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="heart-container">
+      <button onclick="showHeart()" class="heart-button">Butona Tıkla</button>
+      <svg
+        class="heart"
+        id="heart"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="red"
+      >
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+        />
+      </svg>
+      <div class="text" id="message">Seni çok seviyorum ❤️</div>
+    </div>
+
+    <script>
+      function showHeart() {
+        var button = document.querySelector(".heart-button");
+        var heart = document.getElementById("heart");
+        var message = document.getElementById("message");
+
+        button.style.display = "none";
+        heart.style.display = "inline-block";
+
+        setTimeout(function () {
+          message.style.display = "block";
+          createConfetti();
+        }, 2000); // 2 saniye sonra mesajı göster ve konfeti oluştur
+
+        setTimeout(function () {
+          heart.style.display = "none";
+          message.style.display = "none";
+          button.style.display = "inline-block";
+        }, 8000); // 8 saniye sonra kalp ve mesajı gizle, düğmeyi tekrar göster
+      }
+
+      function createConfetti() {
+        var container = document.querySelector(".heart-container");
+        var confettiCount = 500; // Konfeti sayısı
+        var colors = ["#fbc531", "#4cd137", "#7f8fa6", "#273c75", "#e84118"]; // Renk seçenekleri
+
+        for (var i = 0; i < confettiCount; i++) {
+          var confetti = document.createElement("div");
+          confetti.classList.add("confetti");
+          confetti.style.left =
+            Math.random() < 0.5
+              ? "-" + Math.random() * 100 + "vw"
+              : Math.random() * 100 + "vw"; // Rastgele x pozisyonu (sağ veya sol)
+          confetti.style.top = Math.random() * -100 + "vh"; // Rastgele y pozisyonu (üstten başlaması için negatif değer)
+          confetti.style.background =
+            colors[Math.floor(Math.random() * colors.length)]; // Rastgele renk seçimi
+          container.appendChild(confetti);
+
+          setTimeout(
+            function (elem) {
+              elem.remove();
+            },
+            8000,
+            confetti
+          ); // 8 saniye sonra konfeti elementini kaldır
+        }
+      }
+    </script>
+  </body>
+</html>
